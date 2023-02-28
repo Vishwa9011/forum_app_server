@@ -129,6 +129,9 @@ async function sentVerificationEmail(req, res) {
 
      try {
           const transporter = nodemailer.createTransport({
+               host: 'smtp.example.com',
+               port: 587,
+               secure: false,
                service: "gmail",
                auth: {
                     user: process.env.EMAIL,
@@ -165,10 +168,8 @@ async function sentVerificationEmail(req, res) {
 // * verify email after clicking on email button;
 async function verifyEmail(req, res) {
      const { credential } = req.body;
-     // console.log('credential: ', credential);
      try {
           const decode = jwt.verify(credential, process.env.VERIFICATION_SECRET_KEY)
-          // console.log('decode: ', decode.password);
           if (decode) {
                const user = await UserModel.findOne({ email: decode.email });
                if (user) {
